@@ -42,7 +42,7 @@ C’est aussi une opportunité unique pour les **conducteurs** de gagner de l’
 
 ## 📲 Téléchargement
 
-*(Ajoute ici les liens vers l’App Store et Google Play si disponibles)*
+*soon on Google Play and apple store*
 
 ---
 
