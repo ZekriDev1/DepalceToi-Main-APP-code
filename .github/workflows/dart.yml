@@ -1,4 +1,4 @@
-name: Dépalce Toi : Riders
+name: iOS-ipa-build
 
 on:
   workflow_dispatch:
