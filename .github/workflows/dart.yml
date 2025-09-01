@@ -1,7 +1,7 @@
 name: Build iOS App
 
 on:
-  workflow_dispatch: # run manually from GitHub Actions tab
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -37,6 +37,13 @@ jobs:
             eval(File.read(File.join(flutter_application_path, '.flutter-plugins-dependencies')), binding)
           end
           EOF
+
+      - name: Clean and install CocoaPods
+        run: |
+          cd ios
+          pod deintegrate
+          pod install --repo-update
+          cd ..
 
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign
