@@ -17,7 +17,8 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
+          flutter-version: '3.24.3'
+          channel: 'stable'
 
       - name: Install dependencies
         run: flutter pub get
@@ -40,8 +41,8 @@ jobs:
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign
 
-      - name: Upload IPA artifact
+      - name: Upload iOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/iphoneos/*.ipa
+          path: build/ios/iphoneos/
