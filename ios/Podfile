@@ -37,5 +37,8 @@ post_install do |installer|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
     end
   end
-  __apply_Xcode_12_5_M1_post_install_workaround(installer)
+  # Apply Flutter workaround for Xcode 12.5 / Apple Silicon if available.
+  if self.respond_to?(:__apply_Xcode_12_5_M1_post_install_workaround)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+  end
 end
