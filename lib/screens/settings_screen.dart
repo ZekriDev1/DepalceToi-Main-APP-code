@@ -38,7 +38,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         setState(() {
           _userProfile = profile;
           _nameController.text = profile?.name ?? '';
-          _ageController.text = profile?.birthDate != null ? (DateTime.now().difference(profile!.birthDate).inDays ~/ 365).toString() : '';
+          _ageController.text = profile?.birthDate != null
+              ? (DateTime.now().difference(profile!.birthDate).inDays ~/ 365)
+                  .toString()
+              : '';
           _selectedGender = profile?.gender ?? 'Male';
           _profileImageUrl = profile?.profileImageUrl;
           _isLoading = false;
@@ -62,14 +65,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (user != null) {
         final userService = UserService();
         final profile = await userService.getUserProfile(user.id);
-        
+
         if (profile == null) {
           // Create a new profile if it doesn't exist
           await userService.createUserProfile(
             userId: user.id,
             email: user.email ?? '',
             name: _nameController.text.trim(),
-            birthDate: DateTime.now().subtract(Duration(days: int.parse(_ageController.text) * 365)),
+            birthDate: DateTime.now()
+                .subtract(Duration(days: int.parse(_ageController.text) * 365)),
             gender: _selectedGender,
           );
         }
@@ -86,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           setState(() {
             _userProfile = updatedProfile;
           });
-          
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Profile updated successfully')),
           );
@@ -124,10 +128,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (user != null) {
             // Read image bytes
             final bytes = await image.readAsBytes();
-            
+
             // Create a unique file name
-            final fileName = '${user.id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-            
+            final fileName =
+                '${user.id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
             // Upload to Supabase Storage
             await Supabase.instance.client.storage
                 .from('profile-images')
@@ -150,7 +155,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // Show success message
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Profile image updated successfully')),
+                const SnackBar(
+                    content: Text('Profile image updated successfully')),
               );
             }
           }
@@ -180,7 +186,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final languageService = Provider.of<LanguageService>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(languageService.translate('settings')),
@@ -193,7 +199,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (_userProfile != null && (_userProfile!.name == null || _userProfile!.gender == null))
+              if (_userProfile != null && (_userProfile!.gender == null))
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
@@ -205,7 +211,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.warning_amber_rounded, color: Colors.pink[700]),
+                      Icon(Icons.warning_amber_rounded,
+                          color: Colors.pink[700]),
                       const SizedBox(width: 12),
                       const Expanded(
                         child: Text(
@@ -238,7 +245,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                         child: IconButton(
-                          icon: const Icon(Icons.camera_alt, color: Colors.white),
+                          icon:
+                              const Icon(Icons.camera_alt, color: Colors.white),
                           onPressed: _pickImage,
                         ),
                       ),
@@ -272,22 +280,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             controller: _nameController,
                             decoration: InputDecoration(
                               labelText: languageService.translate('name'),
-                              prefixIcon: const Icon(Icons.person, color: Colors.pink),
+                              prefixIcon:
+                                  const Icon(Icons.person, color: Colors.pink),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide:
+                                    BorderSide(color: Colors.grey[300]!),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Colors.pink),
+                                borderSide:
+                                    const BorderSide(color: Colors.pink),
                               ),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return languageService.translate('please_enter_name');
+                                return languageService
+                                    .translate('please_enter_name');
                               }
                               return null;
                             },
@@ -297,23 +309,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             value: _selectedGender,
                             decoration: InputDecoration(
                               labelText: languageService.translate('gender'),
-                              prefixIcon: const Icon(Icons.people, color: Colors.pink),
+                              prefixIcon:
+                                  const Icon(Icons.people, color: Colors.pink),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide:
+                                    BorderSide(color: Colors.grey[300]!),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Colors.pink),
+                                borderSide:
+                                    const BorderSide(color: Colors.pink),
                               ),
                             ),
                             items: [
-                              DropdownMenuItem(value: 'male', child: Text(languageService.translate('male'))),
-                              DropdownMenuItem(value: 'female', child: Text(languageService.translate('female'))),
-                              DropdownMenuItem(value: 'other', child: Text(languageService.translate('other'))),
+                              DropdownMenuItem(
+                                  value: 'male',
+                                  child:
+                                      Text(languageService.translate('male'))),
+                              DropdownMenuItem(
+                                  value: 'female',
+                                  child: Text(
+                                      languageService.translate('female'))),
+                              DropdownMenuItem(
+                                  value: 'other',
+                                  child:
+                                      Text(languageService.translate('other'))),
                             ],
                             onChanged: (value) {
                               if (value != null) {
@@ -324,7 +348,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return languageService.translate('please_select_gender');
+                                return languageService
+                                    .translate('please_select_gender');
                               }
                               return null;
                             },
@@ -338,18 +363,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
                               ),
-                              prefixIcon: Icon(Icons.calendar_today, color: Colors.pink),
+                              prefixIcon: Icon(Icons.calendar_today,
+                                  color: Colors.pink),
                               suffixText: languageService.translate('years'),
                               suffixStyle: TextStyle(color: Colors.grey[600]),
                             ),
                             keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return languageService.translate('please_enter_age');
+                                return languageService
+                                    .translate('please_enter_age');
                               }
                               final age = int.tryParse(value);
                               if (age == null) {
-                                return languageService.translate('enter_valid_number');
+                                return languageService
+                                    .translate('enter_valid_number');
                               }
                               if (age < 18 || age > 100) {
                                 return languageService.translate('age_range');
@@ -379,7 +407,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 width: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
                                 ),
                               )
                             : Text(
@@ -430,7 +459,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           const Text('🇺🇸 '),
                           const SizedBox(width: 8),
-                          Text(languageService.translate('language') == 'اللغة' ? 'English' : 'English'),
+                          Text(languageService.translate('language') == 'اللغة'
+                              ? 'English'
+                              : 'English'),
                         ],
                       ),
                       value: 'en',
@@ -446,7 +477,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           const Text('🇫🇷 '),
                           const SizedBox(width: 8),
-                          Text(languageService.translate('language') == 'اللغة' ? 'Français' : 'Français'),
+                          Text(languageService.translate('language') == 'اللغة'
+                              ? 'Français'
+                              : 'Français'),
                         ],
                       ),
                       value: 'fr',
@@ -462,7 +495,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         children: [
                           const Text('🇸🇦 '),
                           const SizedBox(width: 8),
-                          Text(languageService.translate('language') == 'اللغة' ? 'العربية' : 'العربية'),
+                          Text(languageService.translate('language') == 'اللغة'
+                              ? 'العربية'
+                              : 'العربية'),
                         ],
                       ),
                       value: 'ar',
@@ -489,4 +524,4 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _ageController.dispose();
     super.dispose();
   }
-} 
+}

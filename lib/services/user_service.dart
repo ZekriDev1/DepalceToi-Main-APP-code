@@ -17,7 +17,7 @@ class UserService {
     bool isDriver = false,
   }) async {
     final now = DateTime.now().toIso8601String();
-    
+
     final data = {
       'id': userId,
       'email': email,
@@ -31,11 +31,8 @@ class UserService {
       'is_driver': isDriver,
     };
 
-    final response = await _client
-        .from('user_profiles')
-        .insert(data)
-        .select()
-        .single();
+    final response =
+        await _client.from('user_profiles').insert(data).select().single();
 
     return UserProfile.fromJson(response);
   }
@@ -78,11 +75,11 @@ class UserService {
           .eq('id', userId)
           .select()
           .single();
-      
+
       if (response == null) {
         throw Exception('Failed to update profile');
       }
-      
+
       return UserProfile.fromJson(response);
     } catch (e) {
       print('Error updating profile: $e');
@@ -91,10 +88,7 @@ class UserService {
   }
 
   Future<void> deleteUserProfile(String userId) async {
-    await _client
-        .from('user_profiles')
-        .delete()
-        .eq('id', userId);
+    await _client.from('user_profiles').delete().eq('id', userId);
   }
 
   Future<bool> safeUpdateUserProfile({
@@ -177,10 +171,8 @@ class UserService {
 
   bool isProfileComplete(UserProfile? profile) {
     if (profile == null) return false;
-    
-    return profile.name.isNotEmpty && 
-           profile.gender.isNotEmpty && 
-           profile.birthDate != null;
+
+    return profile.name.isNotEmpty && profile.gender.isNotEmpty;
   }
 
   Future<bool> checkAndRedirectToSettings(BuildContext context) async {
@@ -202,4 +194,4 @@ class UserService {
     }
     return false;
   }
-} 
+}
